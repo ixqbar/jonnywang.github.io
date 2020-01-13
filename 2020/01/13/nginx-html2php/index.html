@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="[toc] 需求描述 以html结尾的文件请求如果系统存在对应html文件则解析，否则转为php文件解析，否则统一转index.php解析  配置12345678910111213141516171819202122232425262728293031323334353637383940414243444546map $request_filename $jx_file &amp;#123;    def">
+<meta name="keywords" content="Nginx map rewrite">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx配置html与php映射解析">
+<meta property="og:url" content="https://www.ixqbar.com/2020/01/13/nginx-html2php/index.html">
+<meta property="og:site_name" content="星期八的博客">
+<meta property="og:description" content="[toc] 需求描述 以html结尾的文件请求如果系统存在对应html文件则解析，否则转为php文件解析，否则统一转index.php解析  配置12345678910111213141516171819202122232425262728293031323334353637383940414243444546map $request_filename $jx_file &amp;#123;    def">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2020-01-13T03:41:11.990Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx配置html与php映射解析">
+<meta name="twitter:description" content="[toc] 需求描述 以html结尾的文件请求如果系统存在对应html文件则解析，否则转为php文件解析，否则统一转index.php解析  配置12345678910111213141516171819202122232425262728293031323334353637383940414243444546map $request_filename $jx_file &amp;#123;    def">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>nginx配置html与php映射解析</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- rss -->
+    
+    
+</head>
+
+<body>
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="https://github.com/jonnywang">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/05/12/golang-implement-lru/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://www.ixqbar.com/2020/01/13/nginx-html2php/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&text=nginx配置html与php映射解析"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&title=nginx配置html与php映射解析"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&is_video=false&description=nginx配置html与php映射解析"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=nginx配置html与php映射解析&body=Check out this article: https://www.ixqbar.com/2020/01/13/nginx-html2php/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&title=nginx配置html与php映射解析"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&title=nginx配置html与php映射解析"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&title=nginx配置html与php映射解析"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&title=nginx配置html与php映射解析"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&name=nginx配置html与php映射解析&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#需求描述"><span class="toc-number">1.</span> <span class="toc-text">需求描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置"><span class="toc-number">2.</span> <span class="toc-text">配置</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index width mx-auto px2 my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        nginx配置html与php映射解析
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">星期八的博客</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2020-01-13T03:33:24.000Z" itemprop="datePublished">2020-01-13</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Nginx-map-rewrite/">Nginx map rewrite</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>[toc]</p>
+<h3 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h3><ul>
+<li>以html结尾的文件请求如果系统存在对应html文件则解析，否则转为php文件解析，否则统一转index.php解析</li>
+</ul>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">map $request_filename $jx_file &#123;</span><br><span class="line">    default $request_filename;</span><br><span class="line">    ~^(.*)\.html$ $1.php;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name boc.me.com;</span><br><span class="line">    index index.html index.php;</span><br><span class="line">    root /data/wwwroot/boc/htdoc; </span><br><span class="line"></span><br><span class="line">    add_header Access-Control-Allow-Origin *;</span><br><span class="line">    add_header Access-Control-Allow-Methods &apos;GET, POST, OPTIONS&apos;;</span><br><span class="line">    add_header Access-Control-Allow-Headers &apos;DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization&apos;;</span><br><span class="line"></span><br><span class="line">    if ($request_method = &apos;OPTIONS&apos;) &#123;</span><br><span class="line">        return 204;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location = /favicon.ico &#123;</span><br><span class="line">        access_log off;    </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #.html结尾的请求首先判断文件是否存在，存在则使用否则改成以.php结尾的文件，如果不存在则统一给index.php处理</span><br><span class="line">    location ~ ^/(.*)\.html$ &#123;</span><br><span class="line">        if (-f $request_filename) &#123;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (!-f $jx_file) &#123;</span><br><span class="line">            rewrite ^(.*)\.html$ /index.php last;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        rewrite ^(.*)\.html$ $1.php last;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    #.php结尾的如果不存在，则改交index.php处理</span><br><span class="line">    location ~ \.php$ &#123;</span><br><span class="line">        if (!-f $request_filename) &#123;</span><br><span class="line">            rewrite ^(.*)\.php$ /index.php last;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        fastcgi_pass  127.0.0.1:9000;</span><br><span class="line">        include       fastcgi.conf;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
+    </div>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="https://github.com/jonnywang">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#需求描述"><span class="toc-number">1.</span> <span class="toc-text">需求描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置"><span class="toc-number">2.</span> <span class="toc-text">配置</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://www.ixqbar.com/2020/01/13/nginx-html2php/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&text=nginx配置html与php映射解析"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&title=nginx配置html与php映射解析"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&is_video=false&description=nginx配置html与php映射解析"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=nginx配置html与php映射解析&body=Check out this article: https://www.ixqbar.com/2020/01/13/nginx-html2php/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&title=nginx配置html与php映射解析"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&title=nginx配置html与php映射解析"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&title=nginx配置html与php映射解析"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&title=nginx配置html与php映射解析"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=https://www.ixqbar.com/2020/01/13/nginx-html2php/&name=nginx配置html与php映射解析&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 xingqiba
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="https://github.com/jonnywang">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+    <!-- Disqus Comments -->
+    <script type="text/javascript">
+        var disqus_shortname = 'ixqbar';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
